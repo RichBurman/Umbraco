@@ -1,0 +1,64 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.HomePage>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>@ViewData["Title"] - My Umbraco Site</title>
+</head>
+<body>
+
+    <div class="container mt-5 text-center">
+        <div class="jumbotron">
+            @if (Model.HasValue("Image"))
+            {   
+                var mediaPicker = Model.Value<IPublishedContent>("Image");
+            
+                if (mediaPicker != null)
+                {
+                    <img src="@mediaPicker.Url()" alt="Image" class="img-fluid rounded mx-auto d-block img-thumbnail" style="transition: transform 0.3s ease-in-out;"
+                         onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                }
+                else
+                {
+                    <p class="text-danger">Image not found</p>
+                }
+            }
+
+
+            <h1 class="display-4">
+                @{
+                    var title = Model.Value<string>("Title");
+                    for (int i = 0; i < title.Length; i++)
+                    {
+                        <span style="color: @GetRandomColor()">@title[i]</span>
+                    }
+                }
+            </h1>
+            <p class="lead font-weight-bold text-dark">@Html.Raw(Model.Value("BodyText"))</p>
+            <div class="d-flex flex-column align-items-center">
+                <a href="/contact-us" class="btn btn-primary mb-2">Contact Us</a>
+                <a href="https://localhost:44324/media/o4clhkwt/resume-richard-burman.pdf" download="resume-richard-burman.pdf" class="btn btn-secondary">Download CV</a>
+            </div>
+
+        </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    @functions
+    {
+        string GetRandomColor()
+        {
+            var rand = new Random();
+            var color = String.Format("#{0:X6}", rand.Next(0x1000000));
+            return color;
+        }
+    }
+</body>
+</html>
